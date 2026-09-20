@@ -3,9 +3,12 @@
 import { useState } from "react";
 
 const page = () => {
+  const arr = ["React", "Javascript", "Typescript"];
+
   const [number, setNumber] = useState(0);
   const [togglePassword, setTogglePassword] = useState(false);
   const [countCharacters, setCountCharacters] = useState(0);
+  const [activeIndex, setActiveIndex] = useState(-1);
 
   const handleIncrementNumber = () => {
     setNumber(number + 1);
@@ -27,6 +30,10 @@ const page = () => {
     target: { value: string | any[] };
   }) => {
     setCountCharacters(event.target.value.length);
+  };
+
+  const handleGetElementId = (id: number) => {
+    setActiveIndex(id);
   };
 
   return (
@@ -81,6 +88,26 @@ const page = () => {
 
         <p className="text-black font-medium text-2xl mt-3">
           Character count is: {countCharacters}
+        </p>
+      </div>
+
+      <div className="w-75 h-37.5 flex flex-col bg-white rounded-[10px] mt-10 px-2 mb-10">
+        <div className="w-auto h-auto flex flex-col mt-5 gap-2">
+          {arr.map((element, index) => (
+            <button
+              key={index}
+              className={`w-auto h-7.5 rounded-[20px] cursor-pointer text-white ${activeIndex === index ? "bg-orange-400" : "bg-gray-400"}`}
+              onClick={() => handleGetElementId(index)}
+            >
+              {element}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      <div className="w-75 h-37.5 flex flex-col bg-white rounded-[10px] mt-10 mb-10">
+        <p className="text-black font-medium text-[15px]">
+          This is TODO with remove task ability😊
         </p>
       </div>
     </div>
