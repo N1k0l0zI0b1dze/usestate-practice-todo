@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, type ChangeEvent } from "react";
 
 const page = () => {
   const arr = ["React", "Javascript", "Typescript"];
@@ -9,6 +9,8 @@ const page = () => {
   const [togglePassword, setTogglePassword] = useState(false);
   const [countCharacters, setCountCharacters] = useState(0);
   const [activeIndex, setActiveIndex] = useState(-1);
+  const [task, setTask] = useState("");
+  const [tasks, setTasks] = useState(["test1", "test2"]);
 
   const handleIncrementNumber = () => {
     setNumber(number + 1);
@@ -26,14 +28,23 @@ const page = () => {
     setTogglePassword((prev) => !prev);
   };
 
-  const handleCountCharacters = (event: {
-    target: { value: string | any[] };
-  }) => {
+  const handleCountCharacters = (event: ChangeEvent<HTMLInputElement>) => {
     setCountCharacters(event.target.value.length);
   };
 
   const handleGetElementId = (id: number) => {
     setActiveIndex(id);
+  };
+
+  const handleAddTask = () => {
+    if (task.trim()) {
+      setTasks([...tasks, task]);
+      setTask("");
+    }
+  };
+
+  const handleTaskInputValue = (event: ChangeEvent<HTMLInputElement>) => {
+    setTask(event.target.value);
   };
 
   return (
@@ -109,6 +120,31 @@ const page = () => {
         <p className="text-black font-medium text-[15px]">
           This is TODO with remove task ability😊
         </p>
+
+        <div className="flex flex-row items-center justify-center gap-1 mt-1">
+          <input
+            type="text"
+            value={task}
+            onChange={handleTaskInputValue}
+            placeholder="write task..."
+            className="w-50 h-10 border-2 rounded-[10px] px-2"
+          />
+
+          <button
+            onClick={handleAddTask}
+            className="w-20 h-10 rounded-[10px] cursor-pointer text-white bg-green-700 hover:bg-green-400"
+          >
+            ADD
+          </button>
+        </div>
+
+        <ul className="overflow-y-auto px-4">
+          {tasks.map((item, i) => (
+            <li key={i} className="">
+              {item} <button className="cursor-pointer">❌</button>
+            </li>
+          ))}
+        </ul>
       </div>
     </div>
   );
