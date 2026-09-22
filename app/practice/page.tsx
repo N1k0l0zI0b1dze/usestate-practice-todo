@@ -151,3 +151,11 @@ const page = () => {
 };
 
 export default page;
+
+{
+  /* <div className="w-75 h-37.5 flex flex-col bg-white rounded-[10px] mt-10">
+        <p className="text-black font-medium text-2xl mt-3">
+          Text color switcher
+        </p>
+      </div> */
+}

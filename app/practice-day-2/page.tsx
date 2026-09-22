@@ -47,6 +47,10 @@ const page = () => {
     setTask(event.target.value);
   };
 
+  const handleRemoveTask = (index: number) => {
+    setTasks(tasks.filter((task, i) => i !== index));
+  };
+
   return (
     <div className="flex flex-col items-center min-h-screen bg-gray-300">
       <div className="w-75 h-37.5 flex flex-col bg-white rounded-[10px] mt-10">
@@ -141,7 +145,13 @@ const page = () => {
         <ul className="overflow-y-auto px-4">
           {tasks.map((item, i) => (
             <li key={i} className="">
-              {item} <button className="cursor-pointer">❌</button>
+              {item}{" "}
+              <button
+                onClick={() => handleRemoveTask(i)}
+                className="cursor-pointer"
+              >
+                ❌
+              </button>
             </li>
           ))}
         </ul>
