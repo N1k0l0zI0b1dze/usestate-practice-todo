@@ -6,6 +6,8 @@ import { Todo } from "./Todo";
 const Card = () => {
   const [taskInput, setTaskInput] = useState("");
   const [todos, setTodos] = useState<Todo[]>([]);
+  const [filter, setFilter] = useState<Filter>("all");
+  const [toggleFilter, setToggleFilter] = useState(false);
 
   const handleAddTask = () => {
     if (taskInput.trim()) {
@@ -29,11 +31,34 @@ const Card = () => {
     setTodos(todos.filter((todo) => todo.id !== id));
   };
 
+  const handleToggleFilter = () => {
+    setToggleFilter((prev) => !prev);
+  };
+
+  const handleFilter = (filtered: Filter) => {
+    setFilter(filtered);
+    setToggleFilter(false);
+  };
+
   const total = todos.length;
 
   const active = todos.filter((todo) => todo.completed === false).length;
 
   const completed = todos.filter((todo) => todo.completed === true).length;
+
+  let filteredTodos = todos;
+
+  if (filter === "all") {
+    filteredTodos = todos;
+  }
+
+  if (filter === "active") {
+    filteredTodos = todos.filter((todo) => todo.completed === false);
+  }
+
+  if (filter === "completed") {
+    filteredTodos = todos.filter((todo) => todo.completed === true);
+  }
 
   return (
     <div className="flex h-159 w-107.5 flex-col items-center overflow-hidden rounded-[10px] bg-white">
@@ -42,7 +67,7 @@ const Card = () => {
           To-Do List 📝
         </h3>
 
-        <div className="w-auto h-auto flex flex-row gap-5 mt-10 ml-5">
+        <div className="w-auto h-auto flex flex-row gap-5 mt-10 ml-5 relative">
           <input
             type="text"
             value={taskInput}
@@ -58,18 +83,51 @@ const Card = () => {
           >
             ADD
           </button>
+
+          <button
+            onClick={handleToggleFilter}
+            className="w-20 h-10 rounded-[10px] cursor-pointer text-white bg-gray-700 hover:bg-gray-400"
+          >
+            Filter
+          </button>
+
+          {toggleFilter && (
+            <div className="flex flex-col w-20 h-auto absolute top-full left-80 bg-gray-700">
+              <button
+                onClick={() => handleFilter("all")}
+                className="text-white border-b hover:bg-gray-400 cursor-pointer"
+              >
+                All
+              </button>
+              <button
+                onClick={() => handleFilter("active")}
+                className="text-white border-b hover:bg-gray-400 cursor-pointer"
+              >
+                Active
+              </button>
+              <button
+                onClick={() => handleFilter("completed")}
+                className="text-white border-b hover:bg-gray-400 cursor-pointer"
+              >
+                Completed
+              </button>
+            </div>
+          )}
         </div>
       </div>
 
-      <div className="w-full flex-1 rounded-b-[10px] px-5 pt-2 pb-2">
+      <div className="w-full min-h-0 flex-1 rounded-b-[10px] px-5 pt-2 pb-2">
         <div className="w-full h-full border-2 border-gray-400 rounded-[10px] bg-white">
-          <ul>
-            {todos.map((todo) => (
+          <ul className="flex h-full flex-col gap-y-2 overflow-y-auto">
+            {filteredTodos.map((todo, i) => (
               <li
-                className={`${todo.completed === true && "line-through"}`}
+                className={`bg-gray-50 border-b-2 border-gray-400 flex flex-row justify-between items-center px-5 py-2 ${i === 0 && "rounded-t-[10px]"} ${i === filteredTodos.length - 1 && "rounded-b-[10px]"}`}
                 key={todo.id}
               >
-                {todo.title}{" "}
+                <span className={todo.completed ? "line-through" : ""}>
+                  {todo.title}
+                </span>
+
                 <button
                   onClick={() => handleComplete(todo.id)}
                   className="w-20 h-10 rounded-[10px] cursor-pointer text-white bg-green-700 hover:bg-green-400"
